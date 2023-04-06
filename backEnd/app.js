@@ -133,8 +133,11 @@ app.post('/api/v1/sell', (req, res) => {
     loadFile()
         .then(data => {
             // Kontostand auf 0 setzen
-            data[0].Kontostand = 0
-            data[0].Auslastung = 0
+           // data[0].Kontostand = 0
+           //  data[0].Auslastung = 0
+           // ! hartes löschen und neu setzen auch mit [] drum herum
+           // ! falls was bei post   fetches   falsch im body steht und die db zerstört, weil dann das [] fehlt
+            data = [ {"Kontostand": 0, "Auslastung": 0} ]
             // Daten speichern
             saveFile(data)
                 .then(data => {

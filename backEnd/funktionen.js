@@ -2,14 +2,14 @@
 import './config.js'               // dotenv da rein
 import fs from 'fs'                 // aufs File System zugreifen
 import { constants } from 'fs'   // für fs.access prüfen ob Datei existiert
-
+// import fs from "fs/promises";         // anstatt fs.promises.readFile    wichtig für   async await   damit Promis anstatt Callback zurückgegeben wird
 
 // ! Variablen
 const DB_PATH = process.env.DB_PATH     // *  || './db_Daten.json'
 
 
-// ! loadFile        mit       readFile
-export const loadFile = () => {
+// ! loadFile        mit       readFile        Promise selber bauen
+export const loadFile_ = () => {
     // Promise für fetch  resolve => resolve(data)   reject => reject(err)
     return new Promise( (resolve, reject) => {
         // liest Datei ein
@@ -22,11 +22,25 @@ export const loadFile = () => {
     })
 }
 
+loadFile_() //?
 
+// ! loadFile        mit       readFile        Promise wird automatisch zurückgegeben mit     async await
+export const loadFile = async () => {
+    // try zum abfangen von Fehlern us
+    try {
+        const data = await fs.promises.readFile(DB_PATH)
+        return JSON.parse(data.toString())
+    } catch (err) {
+        throw err
+    } finally {
+        console.log("loadFile Async wurde ausgeführt")
+    }
+    }
 
+    loadFile() //?
 
 // ! saveFile        mit       writeFile
-export const saveFile = (data) => {
+export const saveFile_ = (data) => {
     // Promise für fetch  resolve => resolve(data)  reject => reject(err)
     return new Promise( (resolve, reject) => {
         // schreiben       null + 2  = Zeilenumbruch
@@ -38,3 +52,24 @@ export const saveFile = (data) => {
         })
     })
 }
+
+
+
+// ! saveFile        mit       writeFile     Promise wird automatisch zurückgegeben mit   async await
+export const saveFile = async (dataInput) =>{
+    // try zum abfangen der Promises wie Ergebnis und Error
+    try{
+        // schreiben       null + 2  = Zeilenumbruch
+        // await macht aus Promise ein Ergebnis    und speichert es in   const   data
+       const data = await fs.promises.writeFile(DB_PATH,JSON.stringify(dataInput,null,2))
+         return "Daten wurden gespeichert"
+        // err abfangen
+    }catch (err){
+        // err weitergeben - ausgeben
+        console.log(err)
+        throw err
+    }finally{
+        console.log("saveFile Async wurde ausgeführt")
+    }
+}
+

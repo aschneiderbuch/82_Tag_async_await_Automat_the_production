@@ -42,12 +42,11 @@ app.use(express.json())                            // *  Express-App kann JSON l
 // ! GET fetch      money
 // Geld => db => Kontostand
 // Limit für Kontostand ? 
-app.get('/api/v1/money', (req, res) => {
+app.get('/api/v1/money_', (req, res) => {
     // Daten laden
     loadFile()
         .then((data) => {
             // Kontostand ausgeben
-
             const kontostand = data[0].Kontostand.toString()  // [0] weil db ein Array .toString damit es als Zahl kommt
             //  res.send(kontostand)
             res.json(kontostand)
@@ -55,7 +54,24 @@ app.get('/api/v1/money', (req, res) => {
         .catch(err => {
             res.status(591).json({ message: err.message })
         })
+})
 
+// ! GET fetch      money          mit async await
+// Geld => db => Kontostand
+// Limit für Kontostand ? 
+app.get('/api/v1/money' , async (req, res) => {
+    // Daten fangen bzw. Promises und Errors fangen
+    try{
+        // Daten laden
+        const data = await loadFile()
+        const kontostand = data[0].Kontostand.toString()  // [0] weil db ein Array .toString damit es als Zahl kommt
+        //  res.send(kontostand)
+        res.json(kontostand)
+
+        // Fehler fangen
+    }catch (err) {
+        res.status(591).json({ message: err.message })
+    }
 })
 
 
@@ -63,7 +79,7 @@ app.get('/api/v1/money', (req, res) => {
 
 // ! GET fetch      workload 
 // Anzahl Human input als Auslastung => db => Auslastung
-app.get('/api/v1/workload', (req, res) => {
+app.get('/api/v1/workload_', (req, res) => {
     // Daten laden
     loadFile()
         .then((data) => {
@@ -73,11 +89,23 @@ app.get('/api/v1/workload', (req, res) => {
         .catch(err => {
             res.status(592).json({ message: err.message })
         })
-
 })
 
+// ! GET fetch      workload                      mit async await
+// Anzahl Human input als Auslastung => db => Auslastung
+app.get('/api/v1/workload',   async   (req, res) => {
+    // Daten fangen bzw. Promises und Errors fangen
+    try{
+        // Daten laden
+        const data = await loadFile()
+        // Auslastung ausgeben
+        res.json(data[0].Auslastung)
 
-
+        // Error fangen
+    }catch (err) {
+        res.status(592).json( { message: err.message } )
+    }
+})
 
 
 

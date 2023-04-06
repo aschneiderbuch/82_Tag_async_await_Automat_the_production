@@ -171,6 +171,18 @@ app.post('/api/v1/human',     async (req, res) => {
             try {
                 // Daten laden    // ! await
                 const data = await loadFile() 
+                // Kontostand + Auslastung
+                data[0].Auslastung = Number(data[0].Auslastung ) + Number(human)
+                data[0].Kontostand = Number(data[0].Kontostand) + Number(preisHuman)
+                
+                // ! 2. await oder 2. te try ???
+                // Daten speichern   // ! await
+                const data2 = await saveFile(data)
+                res.status(291).json({ message: data2.message })
+                
+                //  Error fangen   // ! catch
+            }catch (err) {
+                res.status(593).json({ message: err.message })
             }
 })
 
@@ -179,7 +191,7 @@ app.post('/api/v1/human',     async (req, res) => {
 // ! POST fetch       sell
 // Verkauf  von allem setzt db => Kontostand = 0
 // Limit für Kontostand ? 
-app.post('/api/v1/sell', (req, res) => {
+app.post('/api/v1/sell_', (req, res) => {
 
     // Daten laden
     loadFile()
@@ -199,10 +211,29 @@ app.post('/api/v1/sell', (req, res) => {
                     res.status(594).json({ message: err.message })
                 })
         })
-
-
 })
 
+
+// ! POST fetch       sell        async await
+// Verkauf  von allem setzt db => Kontostand = 0
+// Limit für Kontostand ?    // ! async
+app.post('/api/v1/sell' , async (req, res) => {
+    // Daten fangen bzw. Promises und Errors fangen    // ! try
+    try{
+        // Daten laden   // ! await
+        let data = await loadFile()   //?
+        // Kontostand auf 0 setzen
+        data = [ {'Kontostand': 0, 'Auslastung': 0 }]
+
+        // Daten speichern   // ! await
+        const data2 = await saveFile(data)
+        res.status(292).json({ message: data2.message })
+        
+        // Error fangen     // ! catch
+    } catch (err) {
+        res.status(594).json({ message: err.message })
+    }
+})
 
 
 // ! Server   starten     PORT

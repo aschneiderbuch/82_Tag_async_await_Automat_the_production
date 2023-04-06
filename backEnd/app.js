@@ -58,11 +58,11 @@ app.get('/api/v1/money_', (req, res) => {
 
 // ! GET fetch      money          mit async await
 // Geld => db => Kontostand
-// Limit für Kontostand ? 
+// Limit für Kontostand ?    // ! async
 app.get('/api/v1/money' , async (req, res) => {
-    // Daten fangen bzw. Promises und Errors fangen
+    // Daten fangen bzw. Promises und Errors fangen    // ! try
     try{
-        // Daten laden
+        // Daten laden      // ! await
         const data = await loadFile()
         const kontostand = data[0].Kontostand.toString()  // [0] weil db ein Array .toString damit es als Zahl kommt
         //  res.send(kontostand)
@@ -92,11 +92,11 @@ app.get('/api/v1/workload_', (req, res) => {
 })
 
 // ! GET fetch      workload                      mit async await
-// Anzahl Human input als Auslastung => db => Auslastung
+// Anzahl Human input als Auslastung => db => Auslastung    // ! async
 app.get('/api/v1/workload',   async   (req, res) => {
-    // Daten fangen bzw. Promises und Errors fangen
+    // Daten fangen bzw. Promises und Errors fangen     // ! try 
     try{
-        // Daten laden
+        // Daten laden      // ! await
         const data = await loadFile()
         // Auslastung ausgeben
         res.json(data[0].Auslastung)
@@ -113,7 +113,7 @@ app.get('/api/v1/workload',   async   (req, res) => {
 // ! POST fetch       human     
 // Human input => db => Kontostand + Auslastung
 //   Input     kann    1    5    oder   10   sein  prüfen 
-app.post('/api/v1/human', (req, res) => {
+app.post('/api/v1/human_', (req, res) => {
     console.log(req.body) //?
     const human = req.body.human
     let preisHuman = 0
@@ -148,7 +148,31 @@ app.post('/api/v1/human', (req, res) => {
         })
 })
 
+// ! POST fetch       human           async await
+// Human input => db => Kontostand + Auslastung
+//   Input     kann    1    5    oder   10   sein  prüfen    // ! async
+app.post('/api/v1/human',     async (req, res) => {
+    console.log(req.body)
+    const human = req.body.human
+    let preisHuman = 0
+    console.log(human)
 
+    if (human == 1) {
+        preisHuman = 10000
+            }
+            else if (human == 5) {
+                preisHuman = 50000
+            }
+            else if (human == 10 ){
+                preisHuman = 100000
+            }
+
+            // Daten fangen bzw. Promises und Errors fangen
+            try {
+                // Daten laden    // ! await
+                const data = await loadFile() 
+            }
+})
 
 
 

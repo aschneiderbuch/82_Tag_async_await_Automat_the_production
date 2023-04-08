@@ -71,6 +71,8 @@ app.get('/api/v1/money' , async (req, res) => {
         // Fehler fangen
     }catch (err) {
         res.status(591).json({ message: err.message })
+    } finally{
+        console.log('get money -->finally')
     }
 })
 
@@ -104,6 +106,8 @@ app.get('/api/v1/workload',   async   (req, res) => {
         // Error fangen
     }catch (err) {
         res.status(592).json( { message: err.message } )
+    }finally{
+        console.log('get workload -->finally')
     }
 })
 
@@ -183,6 +187,8 @@ app.post('/api/v1/human',     async (req, res) => {
                 //  Error fangen   // ! catch
             }catch (err) {
                 res.status(593).json({ message: err.message })
+            }finally{
+                console.log('post human -->finally')
             }
 })
 
@@ -232,6 +238,9 @@ app.post('/api/v1/sell' , async (req, res) => {
         // Error fangen     // ! catch
     } catch (err) {
         res.status(594).json({ message: err.message })
+    } finally {
+        console.log('post sell -->finally')
+        
     }
 })
 
